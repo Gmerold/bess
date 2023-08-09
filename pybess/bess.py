@@ -176,7 +176,10 @@ class BESS(object):
         self.status = None
 
     def is_connected(self):
-        return (self.status == grpc.ChannelConnectivity.READY)
+        return self.status == grpc.ChannelConnectivity.READY
+
+    def is_idle(self):
+        return self.status == grpc.ChannelConnectivity.IDLE
 
     def is_connection_broken(self):
         return self.status == self.BROKEN_CHANNEL
@@ -250,6 +253,9 @@ class BESS(object):
                 raise self.RPCError('Broken RPC channel')
             else:
                 raise self.APIError('BESS daemon not connected')
+
+        if not self.is_idle():
+            raise self.APIError("GRPC channel busy")
 
         req_fn = getattr(self.stub, name)
         if req_pb is None:
