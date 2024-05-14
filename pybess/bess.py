@@ -168,7 +168,7 @@ class BESS(object):
     CLOSING_CHANNEL = "ConnectionClosing"
 
     def __init__(self):
-        self.debug = False
+        self.debug = True
         self.stub = None
         self.channel = None
         self.peer = self.DEF_GRPC_URL
